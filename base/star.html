@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #ddd">
+
+    </canvas>
+    <script>
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 500;
+            canvas.width = 500;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+            
+            drawStar(context, 50, 20, 100, 100, 0);
+            drawStar(context, 50, 35, 200, 150, 30);
+            drawStar(context, 50, 15, 180, 300, 60);
+            drawStar(context, 50, 25, 300, 250, 90);
+            drawStar(context, 50, 10, 400, 200, 120);
+            drawStar(context, 70, 5, 400, 400, 120);
+        }
+
+        function drawStar (cxt, R, r, x, y, rotate) {
+            cxt.beginPath();
+
+            for (var i = 0; i < 5; i++) {
+                cxt.lineTo(Math.cos((18 + i * 72 - rotate) / 180 * Math.PI) * R + x, -Math.sin((18 + i * 72 - rotate) / 180 * Math.PI) * R + y);
+                cxt.lineTo(Math.cos((54 + i * 72 - rotate) / 180 * Math.PI) * r + x, -Math.sin((54 + i * 72 - rotate) / 180 * Math.PI) * r + y);                
+            }
+
+            cxt.closePath();
+            cxt.fillStyle='#ff0';
+            cxt.strokeStyle='#f90';
+            
+            cxt.fill();
+            cxt.stroke();
+        }
+    </script>
+</body>
+</html>

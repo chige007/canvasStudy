@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #ddd">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // transform(a, b, c, d, e, f)
+        // setTransform(a, b, c, d, e, f) 清空之前的变换效果
+        // a c e
+        // b d f
+        // 0 0 1
+        // a, d 水平、垂直缩放
+        // b, c 水平、垂直倾斜
+        // e, f 水平、垂直位移
+
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 500;
+            canvas.width = 500;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+            
+            context.fillStyle='#f00';
+            context.strokeStyle='#00f';
+            context.lineWidth = 10;
+
+            context.save();
+            context.transform(1.5, 0.2, -0.4, 0.5, 100, 100);
+            context.fillRect(0, 0, 200, 200);
+            context.strokeRect(0, 0, 200, 200);
+            context.restore();
+        }
+    </script>
+</body>
+</html>

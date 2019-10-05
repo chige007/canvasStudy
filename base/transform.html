@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #ddd">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // save()
+        // translate()
+        // rotate()
+        // scale()
+        // restore()
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 500;
+            canvas.width = 500;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+
+            context.save(); // 保存状态
+            context.fillStyle='#ff0';
+            context.translate(100, 100);     
+            context.fillRect(0, 0, 200, 200);
+            context.restore(); // 恢复状态
+
+            context.save();
+            context.fillStyle='#f00';
+            context.translate(200, 200);     
+            context.rotate(Math.PI / 180 * 10);
+            context.scale(0.5, 0.8);
+            
+            
+            context.fillRect(0, 0, 200, 200);
+            context.restore();
+            
+        }
+    </script>
+</body>
+</html>

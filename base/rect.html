@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #ddd">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // fillRect(x, y, width, height)
+        // rect(x, y, width, height)
+        // strokeRect(x, y, width, height)
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 500;
+            canvas.width = 500;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+
+            
+            context.strokeStyle = 'green';
+            context.fillStyle = 'red';
+
+            context.lineWidth = 10;
+            
+            context.fillRect(100, 100, 300, 300);
+            context.strokeRect(100, 100, 300, 300);
+            
+            context.rect(200, 200, 100, 100);
+            context.stroke();
+        }
+    </script>
+</body>
+</html>

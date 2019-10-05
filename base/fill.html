@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #ddd">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // fillStyle()
+        // fill()
+        // createLinearGradient 线性渐变
+        // addColorStop 
+        // createRadialGradient 径向渐变
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 500;
+            canvas.width = 500;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+
+            context.moveTo(250, 100);
+            context.lineTo(100, 350);
+            context.lineTo(400, 350);
+            context.lineTo(250, 100);
+            context.lineWidth = 10;
+            context.fillStyle='yellow';
+            // context.fillStyle = '#ff0';
+            // context.fillStyle = '#ffff00';
+            // context.fillStyle = 'rgb(255, 255, 0)';
+            // context.fillStyle = 'rgba(255, 255, 0, 0.8)';
+            // context.fillStyle = 'hsl(20, 62%, 28%)';
+            // context.fillStyle = 'hsla(20, 62%, 28%, 0.6)';
+            // context.fillStyle = 'red';
+            context.strokeStyle='red';
+
+            context.fill();
+            context.stroke();
+            context.closePath();
+            
+            context.beginPath();
+            var linearGrad = context.createLinearGradient(100, 360, 400, 460);
+            linearGrad.addColorStop(0.0, '#fff');
+            linearGrad.addColorStop(0.25, '#ff0');
+            linearGrad.addColorStop(0.5, '#0ff');
+            linearGrad.addColorStop(0.75, '#f0f');
+            linearGrad.addColorStop(1.0, '#000');
+            context.fillStyle = linearGrad;
+            context.fillRect(100, 360, 300, 100);
+            context.closePath();
+            
+            context.beginPath();
+            var linearGrad2 = context.createRadialGradient(400, 70, 0, 400, 70, 80);
+            
+            linearGrad2.addColorStop(0.0, '#fff');
+            linearGrad2.addColorStop(0.25, '#ff0');
+            linearGrad2.addColorStop(0.5, '#0ff');
+            linearGrad2.addColorStop(0.75, '#f0f');
+            linearGrad2.addColorStop(1.0, '#000');
+            context.fillStyle = linearGrad2;
+            context.fillRect(350, 20, 100, 100);
+        }
+    </script>
+</body>
+</html>

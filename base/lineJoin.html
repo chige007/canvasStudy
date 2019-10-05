@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #ddd">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // moveTo(x, y)
+        // lineTo(x, y)
+        // beginPath()
+        // closePath()
+        // stroke()
+        // lineCap 值：butt/round/square
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 500;
+            canvas.width = 500;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+            
+            context.lineWidth=20;
+            context.beginPath();
+            context.moveTo(60, 300);
+            context.lineTo(100, 100);
+            context.lineTo(140, 300);
+            context.lineJoin='miter'; // 默认
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(180, 300);
+            context.lineTo(220, 100);
+            context.lineTo(260, 300);
+            context.lineJoin='bevel'; // 平头
+            context.stroke();
+            
+            context.beginPath();
+            context.moveTo(300, 300);
+            context.lineTo(340, 100);
+            context.lineTo(380, 300);
+            context.lineJoin='round'; // 圆头
+            context.stroke();
+        }
+    </script>
+</body>
+</html>
