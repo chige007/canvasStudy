@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <img src="./../images/arc.jpg" alt="" width="800">
+    <canvas id="canvas" style="border: 1px solid #999">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // context.arc(
+        //     centerx, centery, radius,
+        //     startingAngle, endingAngle,
+        //     anticlockwise = false
+        // )
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 800;
+            canvas.width = 800;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+
+            context.strokeStyle = '#36c';
+            context.fillStyle = '#36c';
+            
+            for (let i = 0; i <= 4; i++) {
+                context.beginPath();
+                context.arc(20 + i * 100, 50, 30, 0, 0.5 * i * Math.PI);
+                context.stroke();
+            }
+
+            for (let i = 0; i <= 4; i++) {
+                context.beginPath();
+                context.arc(20 + i * 100, 150, 30, 0, 0.5 * i * Math.PI);
+                context.closePath();
+                context.stroke();
+            }
+
+            for (let i = 0; i <= 4; i++) {
+                context.beginPath();
+                context.arc(20 + i * 100, 250, 30, 0, 0.5 * i * Math.PI, true);
+                context.stroke();
+            }
+
+            for (let i = 0; i <= 4; i++) {
+                context.beginPath();
+                context.arc(20 + i * 100, 350, 30, 0, 0.5 * i * Math.PI, true);
+                context.closePath();
+                context.stroke();
+            }
+
+            for (let i = 0; i <= 4; i++) {
+                context.beginPath();
+                context.arc(20 + i * 100, 450, 30, 0, 0.5 * i * Math.PI);
+                context.fill();
+            }
+
+            for (let i = 0; i <= 4; i++) {
+                context.beginPath();
+                context.arc(20 + i * 100, 550, 30, 0, 0.5 * i * Math.PI, true);
+                context.fill();
+            }
+            
+        }
+    </script>
+</body>
+</html>

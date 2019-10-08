@@ -7,7 +7,7 @@
     <title>canvas</title>
 </head>
 <body>
-    <canvas id="canvas" style="border: 1px solid #ddd">
+    <canvas id="canvas" style="border: 1px solid #999">
 
     </canvas>
     <script>
@@ -15,7 +15,7 @@
         // fillStyle()
         // fill()
         // createLinearGradient 线性渐变
-        // addColorStop 
+        // addColorStop(float, color) 
         // createRadialGradient 径向渐变
         window.onload = function() {
             var canvas = document.getElementById('canvas');
@@ -56,7 +56,6 @@
             
             context.beginPath();
             var linearGrad2 = context.createRadialGradient(400, 70, 0, 400, 70, 80);
-            
             linearGrad2.addColorStop(0.0, '#fff');
             linearGrad2.addColorStop(0.25, '#ff0');
             linearGrad2.addColorStop(0.5, '#0ff');

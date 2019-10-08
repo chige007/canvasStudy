@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <img src="./../images/arcTo.jpg" alt="" width="800">
+    <canvas id="canvas" style="border: 1px solid #999">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // context.arcTo(
+        //     x1, y1, x2, y2, radius
+        // )
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 800;
+            canvas.width = 800;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+            
+            context.lineWidth = 10;
+            context.strokeStyle='red';
+            
+            drawArc(context, 100, 100, 400, 100, 600, 600, 200);
+        }
+        function drawArc(context, x0, y0, x1, y1, x2, y2, r) {
+            context.beginPath();
+            context.moveTo(x0, y0);
+            context.arcTo(x1, y1, x2, y2, r);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(x0, y0);
+            context.lineTo(x1, y1);
+            context.lineTo(x2, y2);
+            context.lineWidth = 1;
+            context.strokeStyle = '#999';
+            context.stroke();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #999">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // createPattern(image, repetition) repetition: repeat-y/repeat-x/repeat
+        // createPattern(canvas, repetition) repetition: repeat-y/repeat-x/repeat
+        // createPattern(video, repetition) repetition: repeat-y/repeat-x/repeat
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 800;
+            canvas.width = 800;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+            
+            bgImg = new Image();
+            bgImg.src = '../images/starEye_canvas.png';
+            bgImg2 = new Image();
+            bgImg2.src = '../images/star_canvas.png';
+            bgImg.onload = function() {
+                var pattern = context.createPattern(bgImg, 'repeat');
+                context.fillStyle = pattern;
+                context.fillRect(100, 100, 600, 600);
+            }
+            bgImg2.onload = function() {
+                var pattern2 = context.createPattern(bgImg2, 'repeat');
+                context.lineWidth = 50;
+                context.strokeStyle = pattern2;
+                context.strokeRect(100, 100, 600, 600);
+            }
+        }
+    </script>
+</body>
+</html>
