@@ -12,9 +12,21 @@
     </canvas>
     <script>
         // 关键字：
+
+        // 样式：
         // context.font='bold 40px Arial'; 
         // font-style(normal/italic/oblique)  font-variant(normal/small-caps)  font-weight(lighter/normal/bold/bolder/100~900)  font-size(px/em/150%)  font-family
+
+        // 对齐：
+        // context.textAlign = "start | left | center | right |end"
+        // context.textBaseline = "top | hanging | middle | alphabetic | ideographic | bottom"
+
+        // 度量：
+        // context.measureText(text).width;
+
+        // 绘制：
         // context.fillText(text, x, y, maxWidth);
+
         window.onload = function() {
             var canvas = document.getElementById('canvas');
             canvas.height = 800;
@@ -23,9 +35,12 @@
             var context = canvas.getContext('2d');
             
             context.font='italic bold 40px Arial';
-            context.textAlign='center';
+            context.textAlign='center';// start | left | center | right |end
+            context.textBaseline='bottom';// top | hanging | middle | alphabetic | ideographic | bottom
             context.fillStyle='#039';
-            context.fillText('你好canvas', 400, 100, 400);
+            var width = context.measureText("你好canvas").width;
+            context.fillText('你好canvas：' + width, 400, 100, 500);
+            
             context.strokeText('你好canvas', 100, 200, 400);
             
         }   

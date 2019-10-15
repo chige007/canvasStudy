@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvas" style="border: 1px solid #999">
+
+    </canvas>
+    <div id="buttons">
+        <a href="javascript:draw('source-over')">source-over</a>
+        <a href="javascript:draw('copy')">copy</a>
+        <a href="javascript:draw('destination-in')">destination-in</a>
+        <a href="javascript:draw('destination-out')">destination-out</a>
+        <a href="javascript:draw('destination-over')">destination-over</a>
+        <a href="javascript:draw('lighter')">lighter</a>
+        <a href="javascript:draw('source-atop')">source-atop</a>
+        <a href="javascript:draw('source-in')">source-in</a>
+        <a href="javascript:draw('source-out')">source-out</a>
+        <a href="javascript:draw('xor')">xor</a>
+    </div>
+    <script>
+        // 关键字：
+        // context.globalCompositeOperation='source-over | copy | destination-in | destination-out | destination-over | lighter | source-atop | source-in | source-out | xor';
+
+        window.onload = function() {
+            draw('source-over');
+        }   
+
+        function draw (type) {
+            var canvas = document.getElementById('canvas');
+            canvas.height = 600;
+            canvas.width = 600;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            
+
+            context.fillStyle='blue';
+            context.fillRect(100, 100, 300, 300);
+            
+            context.globalCompositeOperation = type;
+            
+            context.fillStyle='red';
+            context.beginPath();
+            context.moveTo(200, 200);
+            context.lineTo(50, 400);
+            context.lineTo(300, 500);
+            context.closePath();
+            context.fill();
+        }
+    </script>
+</body>
+</html>
