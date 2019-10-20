@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body style="background-color: #000;">
+    <canvas id="canvas" style="border: 1px solid #999">
+
+    </canvas>
+    <canvas id="offCanvas" style="border: 1px solid #999; display: none;">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // context.drawImage(Image, dX, dY, dWidth, dHeight); 把图像渲染到canvas的某个范围
+        // context.drawImage(Image, sx, sy, sw, sh, dx, dy, dw, dh); 把原图像的某个范围渲染到canvas的某个范围
+
+        var canvas, 
+        context, 
+        offCanvas, // 离屏canvas
+        offContext, 
+        image, // 图像对象
+        scale, // 放大倍数
+        flag = false; // 是否显示放大镜
+
+        window.onload = function() {
+            canvas = document.getElementById('canvas');
+            canvas.width = 800;
+            canvas.height = 600;
+            offCanvas = document.getElementById('offCanvas');
+            image = new Image();
+            // 获取canvas上下文环境
+            context = canvas.getContext('2d');
+            offContext = offCanvas.getContext('2d');
+
+            image.src = './../myPics/image1.jpg';
+            image.onload = function(){
+                offCanvas.width = image.width;
+                offCanvas.height = image.height;
+                scale = offCanvas.width / canvas.width;
+
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                offContext.drawImage(image, 0, 0);
+            }
+            canvas.onmousedown = function(e){
+                e.preventDefault();
+                flag = true;
+                var point = windowToCanvas(e.clientX, e.clientY);
+                draw(true, point);
+            }
+            canvas.onmousemove = function(e){
+                e.preventDefault();
+                if (flag) {    
+                    var point = windowToCanvas(e.clientX, e.clientY);
+                    draw(true, point);
+                }
+            }
+            canvas.onmouseup = function(e){
+                e.preventDefault();
+                draw(false);
+                flag = false;
+            }
+            canvas.onmouseout = function(e){
+                e.preventDefault();
+                draw(false);
+                flag = false;
+            }
+        }
+        // 绘制图像
+        function draw (isShowMagnifier, point) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            if (isShowMagnifier) {
+                drawMagifier(point);
+            }
+        }
+        // 绘制放大镜
+        function drawMagifier(point) {
+            var image_x = point.x * scale;
+            var image_y = point.y * scale;
+            var r = 150;
+
+            var sx = image_x - r;
+            var sy = image_y - r;
+
+            var dx = point.x - r;
+            var dy = point.y - r;
+
+            context.save();
+            context.lineWidth=10;
+            context.strokeStyle='#fff';
+            
+            context.beginPath();
+            context.arc(point.x, point.y, r, 0, Math.PI * 2);
+            context.stroke();
+            context.clip();
+            context.drawImage(image, sx, sy, 2 * r, 2 * r, dx, dy, 2 * r, 2 * r);
+            context.restore();
+        }
+        // 获取鼠标在canvas内的坐标
+        function windowToCanvas (x, y) {
+            var canvas_coordinate = canvas.getBoundingClientRect();
+            return {
+                x: x - canvas_coordinate.left,
+                y: y - canvas_coordinate.top
+            }
+        }
+    </script>   
+</body>
+</html>

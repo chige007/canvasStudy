@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="canvasA" style="border: 1px solid #999">
+
+    </canvas>
+    <canvas id="canvasB" style="border: 1px solid #999">
+
+    </canvas>
+    <div>
+        <a id="filter" href="javascript:filter('noRed')">noRed</a>
+        <a id="filter" href="javascript:filter('noGreen')">noGreen</a>
+        <a id="filter" href="javascript:filter('noBlue')">noBlue</a>
+        <a id="filter" href="javascript:filter('grey')">灰度</a>
+        <a id="filter" href="javascript:filter('blackWhite')">黑白</a>
+    </div>
+    <script>
+        // 关键字：
+        // context.getImageData(sx, sy, sw, sh);
+        // context.putImageData(imagedata, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
+        
+
+        var canvasA, contextA, canvasB, contextB, image;
+
+        window.onload = function() {
+            canvasA = document.getElementById('canvasA');
+            canvasA.width = 600;
+            canvasA.height = 380;
+            contextA = canvasA.getContext('2d');
+            canvasB = document.getElementById('canvasB');
+            canvasB.width = 600;
+            canvasB.height = 380;
+            contextB = canvasB.getContext('2d');
+
+
+            image = new Image();
+            image.src = './../myPics/image2.jpg';
+            image.onload = function(){
+                contextA.drawImage(image, 0, 0, canvasA.width, canvasA.height);
+            }
+        }
+
+        function filter(name){
+            var imageData = contextA.getImageData(0, 0, canvasA.width, canvasA.height);
+            var pixelData = imageData.data;
+            pixelData = filterLib[name](pixelData);
+            contextB.clearRect(0, 0, canvasB.width, canvasB.height);
+            contextB.putImageData(imageData, 0, 0, 0, 0, canvasB.width, canvasB.height);
+        }
+
+        var filterLib = {
+            noRed : function(pixelData){
+                for (let i = 0; i < pixelData.length; i++) {
+                    pixelData[i * 4] = 0;
+                }
+                return pixelData;
+            },
+            noGreen : function(pixelData){
+                for (let i = 0; i < pixelData.length; i++) {
+                    pixelData[i * 4 + 1] = 0;
+                }
+                return pixelData;
+            },
+            noBlue : function(pixelData){
+                for (let i = 0; i < pixelData.length; i++) {
+                    pixelData[i * 4 + 2] = 0;
+                }
+                return pixelData;
+            },
+            grey : function(pixelData){
+                for (let i = 0; i < pixelData.length; i++) {
+                    var r = pixelData[i * 4 + 0];
+                    var g = pixelData[i * 4 + 1];
+                    var b = pixelData[i * 4 + 2];
+                    var grey = r * 0.3 + g * 0.59 + b * 0.11;
+                    pixelData[i * 4 + 0] = grey;
+                    pixelData[i * 4 + 1] = grey;
+                    pixelData[i * 4 + 2] = grey;
+                }
+                return pixelData;
+            },
+            blackWhite : function(pixelData){
+                for (let i = 0; i < pixelData.length; i++) {
+                    var r = pixelData[i * 4 + 0];
+                    var g = pixelData[i * 4 + 1];
+                    var b = pixelData[i * 4 + 2];
+                    var grey = r * 0.3 + g * 0.59 + b * 0.11;
+                    var result;
+                    if (grey > 255 / 2) {
+                        result = 255;
+                    } else {
+                        result = 0;
+                    }
+                    pixelData[i * 4 + 0] = result;
+                    pixelData[i * 4 + 1] = result;
+                    pixelData[i * 4 + 2] = result;
+                }
+                return pixelData;
+            }
+        }
+    </script>   
+</body>
+</html>

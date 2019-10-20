@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body style="background-color: #000;">
+    <canvas id="canvas" style="border: 1px solid #999">
+
+    </canvas>
+    <canvas id="canvas_wm" style="border: 1px solid #999">
+
+        </canvas>
+    <script>
+        // 关键字：
+        // context.drawImage(Image, dX, dY, dWidth, dHeight); 把图像渲染到canvas的某个范围
+        // context.drawImage(Image, sx, sy, sw, sh, dx, dy, dw, dh); 把原图像的某个范围渲染到canvas的某个范围
+
+        var canvas, context, canvas_wm, context_wm, image;
+
+        window.onload = function() {
+            canvas = document.getElementById('canvas');
+            canvas.height = 800;
+            canvas.width = 800;
+            canvas_wm = document.getElementById('canvas_wm');
+            canvas_wm.height = 100;
+            canvas_wm.width = 300;
+            image = new Image();
+            // 获取canvas上下文环境
+            context = canvas.getContext('2d');
+            context_wm = canvas_wm.getContext('2d');
+
+            image.src = './../myPics/image1.jpg';
+            image.onload = function(){
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                context.drawImage(canvas_wm, canvas.width - canvas_wm.width, canvas.height - canvas_wm.height);
+                
+            }
+
+            context_wm.font='bold 40px Arial';
+            context_wm.lineWidth = 1;
+            context_wm.fillStyle='rgba(255, 255, 255, 0.5)';
+            context_wm.textBaseline='middle';
+            context_wm.fillText('by chenyuchi', 20, 50);
+            
+        }
+    </script>   
+</body>
+</html>

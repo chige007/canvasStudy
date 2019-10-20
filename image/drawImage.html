@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <input type="file" id="fileSelect">
+    <br><br>
+    <canvas id="canvas" style="border: 1px solid #999">
+
+    </canvas>
+    <script>
+        // 关键字：
+        // context.drawImage(Image, dX, dY, dWidth, dHeight); 把图像渲染到canvas的某个范围
+        // context.drawImage(Image, sx, sy, sw, sh, dx, dy, dw, dh); 把原图像的某个范围渲染到canvas的某个范围
+
+        window.onload = function() {
+            var image = new Image();
+            var fileSelect = document.getElementById('fileSelect');
+            fileSelect.addEventListener('change', function(e){
+                var url = window.URL.createObjectURL(document.getElementById('fileSelect').files.item(0));
+                image.src = url;
+                image.onload = function(){
+                    context.drawImage(image, 0, 0, 500, 500);
+                    // context.drawImage(image, 300, 300, 400, 400, 0, 0, canvas.width, canvas.height);
+                    
+                }
+            });
+
+            var canvas = document.getElementById('canvas');
+            canvas.height = 500;
+            canvas.width = 500;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+
+            // image.src = './../myPics/image1.jpg';
+            
+        }
+    </script>   
+</body>
+</html>
