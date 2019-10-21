@@ -19,6 +19,9 @@
         <a id="filter" href="javascript:filter('noBlue')">noBlue</a>
         <a id="filter" href="javascript:filter('grey')">灰度</a>
         <a id="filter" href="javascript:filter('blackWhite')">黑白</a>
+        <a id="filter" href="javascript:filter('reverse')">反色</a>
+        <a id="filter" href="javascript:filter('virtual')">虚化</a>
+        <a id="filter" href="javascript:filter('mosaic')">马赛克</a>
     </div>
     <script>
         // 关键字：
@@ -78,7 +81,8 @@
                     var r = pixelData[i * 4 + 0];
                     var g = pixelData[i * 4 + 1];
                     var b = pixelData[i * 4 + 2];
-                    var grey = r * 0.3 + g * 0.59 + b * 0.11;
+                    // var grey = r * 0.3 + g * 0.59 + b * 0.11;
+                    var grey = ( r + g + b ) / 3;
                     pixelData[i * 4 + 0] = grey;
                     pixelData[i * 4 + 1] = grey;
                     pixelData[i * 4 + 2] = grey;
@@ -92,7 +96,7 @@
                     var b = pixelData[i * 4 + 2];
                     var grey = r * 0.3 + g * 0.59 + b * 0.11;
                     var result;
-                    if (grey > 255 / 2) {
+                    if (grey > (255 / 2)) {
                         result = 255;
                     } else {
                         result = 0;
@@ -100,6 +104,17 @@
                     pixelData[i * 4 + 0] = result;
                     pixelData[i * 4 + 1] = result;
                     pixelData[i * 4 + 2] = result;
+                }
+                return pixelData;
+            },
+            reverse : function(pixelData){
+                for (let i = 0; i < pixelData.length; i++) {
+                    var r = pixelData[i * 4 + 0];
+                    var g = pixelData[i * 4 + 1];
+                    var b = pixelData[i * 4 + 2];
+                    pixelData[i * 4 + 0] = 255 - r;
+                    pixelData[i * 4 + 1] = 255 - g;
+                    pixelData[i * 4 + 2] = 255 - b;
                 }
                 return pixelData;
             }
