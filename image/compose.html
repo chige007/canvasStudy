@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+    <input type="file" id="fileA">
+    <br><br>
+    <canvas id="canvasA" style="border: 1px solid #999"></canvas>
+    <br><br>
+    <input type="file" id="fileB">
+    <br><br>
+    <canvas id="canvasB" style="border: 1px solid #999"></canvas>
+    <br><br>
+    <canvas id="canvasC" style="border: 1px solid #999"></canvas>
+    <script>
+        // 关键字：
+        // context.drawImage(Image, dX, dY, dWidth, dHeight); 把图像渲染到canvas的某个范围
+        // context.drawImage(Image, sx, sy, sw, sh, dx, dy, dw, dh); 把原图像的某个范围渲染到canvas的某个范围
+
+        var canvasA, canvasB, canvasC, contextA, contextB, contextC, fileA, fileB, imageA, imageB;
+
+        window.onload = function() {
+            canvasA.getElementById('canvasA');
+            canvasB.getElementById('canvasB');
+            canvasC.getElementById('canvasC');
+            canvasA.width = 800;
+            canvasA.height = 600;
+            canvasB.width = 800;
+            canvasB.height = 600;
+            canvasC.width = 800;
+            canvasC.height = 600;
+            contextA = canvasA.getContext('2d');
+            contextB = canvasB.getContext('2d');
+            contextC = canvasC.getContext('2d');
+            var fileA = document.getElementById('fileA');
+            var fileB = document.getElementById('fileB');
+            var imageA = new Image();
+            var imageB = new Image();
+
+            fileA.addEventListener('change', function(e){
+                var url = window.URL.createObjectURL(document.getElementById('fileA').files.item(0));
+                imageA.src = url;
+                imageA.onload = function(){
+                    contextA.drawImage(image, 0, 0, canvasA.width, canvasA.height);
+                }
+            });
+            fileB.addEventListener('change', function(e){
+                var url = window.URL.createObjectURL(document.getElementById('fileB').files.item(0));
+                imageB.src = url;
+                imageB.onload = function(){
+                    contextA.drawImage(image, 0, 0, canvasB.width, canvasB.height);
+                }
+            });
+        }
+    </script>   
+</body>
+</html>
