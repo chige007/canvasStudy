@@ -17,11 +17,12 @@
         <a id="filter" href="javascript:filter('noRed')">noRed</a>
         <a id="filter" href="javascript:filter('noGreen')">noGreen</a>
         <a id="filter" href="javascript:filter('noBlue')">noBlue</a>
-        <a id="filter" href="javascript:filter('grey')">灰度</a>
-        <a id="filter" href="javascript:filter('blackWhite')">黑白</a>
-        <a id="filter" href="javascript:filter('reverse')">反色</a>
-        <a id="filter" href="javascript:filter('virtual')">虚化</a>
-        <a id="filter" href="javascript:filter('mosaic')">马赛克</a>
+        <a id="filter" href="javascript:filter('grey')">灰度滤镜</a>
+        <a id="filter" href="javascript:filter('blackWhite')">黑白滤镜</a>
+        <a id="filter" href="javascript:filter('reverse')">反色滤镜</a>
+        <a id="filter" href="javascript:filter('virtual')">虚化滤镜</a>
+        <a id="filter" href="javascript:virtual();">虚化滤镜2</a>
+        <a id="filter" href="javascript:mosaic();">马赛克滤镜</a>
     </div>
     <script>
         // 关键字：
@@ -49,12 +50,21 @@
             }
         }
 
-        function filter(name){
+        function filter(name, value){
             var imageData = contextA.getImageData(0, 0, canvasA.width, canvasA.height);
             var pixelData = imageData.data;
-            pixelData = filterLib[name](pixelData);
+            pixelData = filterLib[name](pixelData, value);
             contextB.clearRect(0, 0, canvasB.width, canvasB.height);
             contextB.putImageData(imageData, 0, 0, 0, 0, canvasB.width, canvasB.height);
+        }
+
+        function virtual(){
+            var r = prompt("虚化程度", "1");
+            filter('virtual2', r * 1);
+        }
+        function mosaic(){
+            var r = prompt("马赛克程度", "10");
+            filter('mosaic', r * 1);
         }
 
         var filterLib = {
@@ -115,6 +125,98 @@
                     pixelData[i * 4 + 0] = 255 - r;
                     pixelData[i * 4 + 1] = 255 - g;
                     pixelData[i * 4 + 2] = 255 - b;
+                }
+                return pixelData;
+            },
+            virtual: function(pixelData, canvas, context) {
+                var tmpImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                var tmpPixelData = tmpImageData.data;
+
+                for (var i = 1; i < canvas.height - 1; i++) {
+                    for (var j = 1; j < canvas.width - 1; j++) {
+
+                        var totalr = 0, totalg = 0, totalb = 0;
+                        for (var dx = -1; dx <= 1; dx++) {
+                            for (var dy = -1; dy <= 1; dy++) {
+                                var x = i + dx;
+                                var y = j + dy;
+                                var p = canvas.width * x + y;
+                                totalr += tmpPixelData[p * 4 + 0];
+                                totalg += tmpPixelData[p * 4 + 1];
+                                totalb += tmpPixelData[p * 4 + 2];
+                            }
+                        }
+                        var pixel = canvas.width * i + j;
+                        pixelData[pixel * 4 + 0] = totalr / 9;
+                        pixelData[pixel * 4 + 1] = totalg / 9;
+                        pixelData[pixel * 4 + 2] = totalb / 9;
+                    }
+                }
+                return pixelData;
+            },
+            virtual2: function(pixelData, r) {
+                var tmpImageData = contextA.getImageData(0, 0, canvasA.width, canvasA.height);
+                var tmpPixelData = tmpImageData.data;
+
+                var totalNum = (2 * r + 1) * (2 * r + 1);
+
+                for (var i = r; i < canvasA.height - r; i++) {
+                    for (var j = r; j < canvasA.width - r; j++) {
+
+                        var totalr = 0, totalg = 0, totalb = 0;
+                        for (var dx = -r; dx <= r; dx++) {
+                            for (var dy = -r; dy <= r; dy++) {
+                                var x = i + dx;
+                                var y = j + dy;
+                                var p = canvasA.width * x + y;
+                                totalr += tmpPixelData[p * 4 + 0];
+                                totalg += tmpPixelData[p * 4 + 1];
+                                totalb += tmpPixelData[p * 4 + 2];
+                            }
+                        }
+                        var pixel = canvasA.width * i + j;
+                        pixelData[pixel * 4 + 0] = totalr / totalNum;
+                        pixelData[pixel * 4 + 1] = totalg / totalNum;
+                        pixelData[pixel * 4 + 2] = totalb / totalNum;
+                    }
+                }
+                return pixelData;
+            },
+            mosaic: function(pixelData, size){
+                var tmpImageData = contextA.getImageData(0, 0, canvasA.width, canvasA.height);
+                var tmpPixelData = tmpImageData.data;
+
+                var totalNum = size * size;
+                for (var i = 0; i < canvasA.height; i += size) {
+                    for (var j = 0; j < canvasA.width; j += size) {
+                        
+                        var totalr = 0, totalg = 0, totalb = 0;
+                        for (var dx = 0; dx < size; dx++) {
+                            for (var dy = 0; dy < size; dy++) {
+                                var x = i + dx;
+                                var y = j + dy;
+                                var p = canvasA.width * x + y;
+                                totalr += tmpPixelData[p * 4 + 0];
+                                totalg += tmpPixelData[p * 4 + 1];
+                                totalb += tmpPixelData[p * 4 + 2];
+                            }
+                        }
+                        var p = canvasA.width * i + j;
+                        var averageR = totalr / totalNum;
+                        var averageG = totalg / totalNum;
+                        var averageB = totalb / totalNum;
+
+                        for (var dx = 0; dx < size; dx++) {
+                            for (var dy = 0; dy < size; dy++) {
+                                var x = i + dx;
+                                var y = j + dy;
+                                var p = canvasA.width * x + y;
+                                pixelData[p * 4 + 0] = averageR;
+                                pixelData[p * 4 + 1] = averageG;
+                                pixelData[p * 4 + 2] = averageB;
+                            }
+                        }
+                    }
                 }
                 return pixelData;
             }
