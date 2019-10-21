@@ -128,25 +128,25 @@
                 }
                 return pixelData;
             },
-            virtual: function(pixelData, canvas, context) {
-                var tmpImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            virtual: function(pixelData) {
+                var tmpImageData = contextA.getImageData(0, 0, canvasA.width, canvasA.height);
                 var tmpPixelData = tmpImageData.data;
 
-                for (var i = 1; i < canvas.height - 1; i++) {
-                    for (var j = 1; j < canvas.width - 1; j++) {
+                for (var i = 1; i < canvasA.height - 1; i++) {
+                    for (var j = 1; j < canvasA.width - 1; j++) {
 
                         var totalr = 0, totalg = 0, totalb = 0;
                         for (var dx = -1; dx <= 1; dx++) {
                             for (var dy = -1; dy <= 1; dy++) {
                                 var x = i + dx;
                                 var y = j + dy;
-                                var p = canvas.width * x + y;
+                                var p = canvasA.width * x + y;
                                 totalr += tmpPixelData[p * 4 + 0];
                                 totalg += tmpPixelData[p * 4 + 1];
                                 totalb += tmpPixelData[p * 4 + 2];
                             }
                         }
-                        var pixel = canvas.width * i + j;
+                        var pixel = canvasA.width * i + j;
                         pixelData[pixel * 4 + 0] = totalr / 9;
                         pixelData[pixel * 4 + 1] = totalg / 9;
                         pixelData[pixel * 4 + 2] = totalb / 9;
