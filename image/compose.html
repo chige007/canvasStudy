@@ -15,18 +15,22 @@
     <br><br>
     <canvas id="canvasB" style="border: 1px solid #999"></canvas>
     <br><br>
+    <button onclick="compose();">合成</button>
+    <br><br>
     <canvas id="canvasC" style="border: 1px solid #999"></canvas>
+    <br><br>
+    <a id="downloadBtn" download="合成照片" href="#">下载</a>
     <script>
         // 关键字：
         // context.drawImage(Image, dX, dY, dWidth, dHeight); 把图像渲染到canvas的某个范围
         // context.drawImage(Image, sx, sy, sw, sh, dx, dy, dw, dh); 把原图像的某个范围渲染到canvas的某个范围
 
-        var canvasA, canvasB, canvasC, contextA, contextB, contextC, fileA, fileB, imageA, imageB;
+        var canvasA, canvasB, canvasC, contextA, contextB, contextC, fileA, fileB, imageA, imageB, flag, initX, initY, t;
 
         window.onload = function() {
-            canvasA.getElementById('canvasA');
-            canvasB.getElementById('canvasB');
-            canvasC.getElementById('canvasC');
+            canvasA = document.getElementById('canvasA');
+            canvasB = document.getElementById('canvasB');
+            canvasC = document.getElementById('canvasC');
             canvasA.width = 800;
             canvasA.height = 600;
             canvasB.width = 800;
@@ -36,25 +40,93 @@
             contextA = canvasA.getContext('2d');
             contextB = canvasB.getContext('2d');
             contextC = canvasC.getContext('2d');
-            var fileA = document.getElementById('fileA');
-            var fileB = document.getElementById('fileB');
-            var imageA = new Image();
-            var imageB = new Image();
+            fileA = document.getElementById('fileA');
+            fileB = document.getElementById('fileB');
+            imageA = new Image();
+            imageB = new Image();
 
             fileA.addEventListener('change', function(e){
                 var url = window.URL.createObjectURL(document.getElementById('fileA').files.item(0));
                 imageA.src = url;
                 imageA.onload = function(){
-                    contextA.drawImage(image, 0, 0, canvasA.width, canvasA.height);
+                    contextA.drawImage(imageA, 0, 0, canvasA.width, canvasA.height);
                 }
             });
             fileB.addEventListener('change', function(e){
                 var url = window.URL.createObjectURL(document.getElementById('fileB').files.item(0));
                 imageB.src = url;
                 imageB.onload = function(){
-                    contextA.drawImage(image, 0, 0, canvasB.width, canvasB.height);
+                    var size = getMyPicSize(imageB, canvasB);
+                    contextB.drawImage(imageB, 0, 0, imageB.width, imageB.height, 0, 0, size.width, size.height);
                 }
             });
+
+            canvasC.onmousedown = function(e) {
+                e.preventDefault();
+                flag = true;
+                var point = windowToCanvas(e.clientX, e.clientY, canvasC);
+                initX = point.x;
+                initY = point.y;
+                // compose(point);
+            }
+
+            canvasC.onmousemove = function(e) {
+                e.preventDefault();
+                if (flag) {
+                    var point = windowToCanvas(e.clientX, e.clientY, canvasC);
+                    var offsetX = point.x - initX;
+                    var offsetY = point.y - initY;
+                    compose(offsetX, offsetY);
+                }
+            }
+            
+            canvasC.onmouseup = function(e) {
+                e.preventDefault();
+                flag = false;
+            }
+
+            canvasC.onmouseout = function(e) {
+                e.preventDefault();
+                flag = false;
+            }
+        }
+        // 合成
+        function compose (x, y) {
+            clearTimeout(t);
+
+            x = x || 0;
+            y = y || 0;
+            contextC.clearRect(0, 0, canvasC.width, canvasC.height);
+            // contextC.drawImage(canvasB, 0, 0, width, height);
+            var size = getMyPicSize(imageB, canvasC);
+            // contextC.drawImage(canvasB, x, y, size.width, size.height);
+            contextC.drawImage(imageB, 0, 0, imageB.width, imageB.height, x, y, size.width, size.height);
+            contextC.drawImage(canvasA, 0, 0, canvasC.width, canvasC.height);
+            
+            t = setTimeout(function(){
+                var dataURL = canvasC.toDataURL("image/png"); 
+                var a = document.getElementById('downloadBtn');
+                a.setAttribute('href', dataURL);
+            }, 300);
+        }
+        function getMyPicSize (image, canvas) {
+            var image_w = image.width;
+            var image_h = image.height;
+            var rate = image_w / image_h;
+            var width = canvas.width + 100;
+            return {
+                width: width,
+                height: width / rate
+            }
+        }
+        // 获取鼠标在canvas内的坐标
+        function windowToCanvas (x, y, canvas) {
+            var canvas_coordinate = canvas.getBoundingClientRect();
+            var point = {
+                x: x - canvas_coordinate.left,
+                y: y - canvas_coordinate.top
+            }
+            return point;
         }
     </script>   
 </body>
