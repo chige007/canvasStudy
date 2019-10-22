@@ -25,7 +25,7 @@
         // context.drawImage(Image, dX, dY, dWidth, dHeight); 把图像渲染到canvas的某个范围
         // context.drawImage(Image, sx, sy, sw, sh, dx, dy, dw, dh); 把原图像的某个范围渲染到canvas的某个范围
 
-        var canvasA, canvasB, canvasC, contextA, contextB, contextC, fileA, fileB, imageA, imageB, flag, initX, initY, t;
+        var canvasA, canvasB, canvasC, contextA, contextB, contextC, fileA, fileB, imageA, imageB, flag_move, flag_scale, initX, initY, t, composeX, composeY, composeW, composeH, composeScale = 1;
 
         window.onload = function() {
             canvasA = document.getElementById('canvasA');
@@ -45,6 +45,7 @@
             imageA = new Image();
             imageB = new Image();
 
+            // 模板选择
             fileA.addEventListener('change', function(e){
                 var url = window.URL.createObjectURL(document.getElementById('fileA').files.item(0));
                 imageA.src = url;
@@ -52,6 +53,7 @@
                     contextA.drawImage(imageA, 0, 0, canvasA.width, canvasA.height);
                 }
             });
+            // 照片选择
             fileB.addEventListener('change', function(e){
                 var url = window.URL.createObjectURL(document.getElementById('fileB').files.item(0));
                 imageB.src = url;
@@ -61,47 +63,65 @@
                 }
             });
 
+            // 点击事件
             canvasC.onmousedown = function(e) {
                 e.preventDefault();
-                flag = true;
+                flag_move = true;
                 var point = windowToCanvas(e.clientX, e.clientY, canvasC);
                 initX = point.x;
                 initY = point.y;
                 // compose(point);
             }
-
+            // 拖动调整位置
             canvasC.onmousemove = function(e) {
                 e.preventDefault();
-                if (flag) {
+                if (flag_move) {
                     var point = windowToCanvas(e.clientX, e.clientY, canvasC);
                     var offsetX = point.x - initX;
                     var offsetY = point.y - initY;
-                    compose(offsetX, offsetY);
+                    compose(offsetX, offsetY, composeW, composeH);
                 }
             }
-            
+            // 鼠标放开
             canvasC.onmouseup = function(e) {
                 e.preventDefault();
-                flag = false;
+                flag_move = false;
             }
-
+            // 鼠标离开
             canvasC.onmouseout = function(e) {
                 e.preventDefault();
-                flag = false;
+                flag_move = false;
+            }
+            // 鼠标离开
+            canvasC.onmousewheel = function(e) {
+                e.preventDefault();
+                if (!flag_scale) return;
+                var size = getMyPicSize(imageB, canvasC), width, height;
+                console.log(size);
+                if (e.wheelDelta > 0) { // 
+                    composeScale += 0.02;
+                    width = size.width * composeScale;
+                    height = size.height * composeScale;
+                } else if (e.wheelDelta < 0) { // 
+                    composeScale -= 0.02;
+                    width = size.width * composeScale;
+                    height = size.height * composeScale;
+                }
+                compose(composeX, composeY, width, height);
             }
         }
         // 合成
-        function compose (x, y) {
+        function compose (x, y, width, height) {
             clearTimeout(t);
-
-            x = x || 0;
-            y = y || 0;
-            contextC.clearRect(0, 0, canvasC.width, canvasC.height);
-            // contextC.drawImage(canvasB, 0, 0, width, height);
             var size = getMyPicSize(imageB, canvasC);
-            // contextC.drawImage(canvasB, x, y, size.width, size.height);
-            contextC.drawImage(imageB, 0, 0, imageB.width, imageB.height, x, y, size.width, size.height);
+            composeX = x || 0;
+            composeY = y || 0;
+            composeW = width || size.width;
+            composeH = height || size.height;
+            contextC.clearRect(0, 0, canvasC.width, canvasC.height);
+            contextC.drawImage(imageB, 0, 0, imageB.width, imageB.height, composeX, composeY, composeW, composeH);
             contextC.drawImage(canvasA, 0, 0, canvasC.width, canvasC.height);
+            flag_scale = true;
             
             t = setTimeout(function(){
                 var dataURL = canvasC.toDataURL("image/png"); 
@@ -109,6 +129,7 @@
                 a.setAttribute('href', dataURL);
             }, 300);
         }
+        // 计算获取照片尺寸
         function getMyPicSize (image, canvas) {
             var image_w = image.width;
             var image_h = image.height;
