@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" style="padding: 0px; margin: 0px; height: 100%; width: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body style="padding: 0px; margin: 0px; height: 100%; width: 100%;">
+    <canvas id="canvas">
+
+    </canvas>
+    <script>
+        // 关键字：
+
+        var canvas, ball = {
+            x: 200,
+            y: 200,
+            r: 20,
+            g: 20,
+            vx: -4,
+            vy: 0,
+            color: '#39d'
+        }
+        window.onload = function() {
+            canvas = document.getElementById('canvas');
+            canvas.height = document.body.clientHeight;
+            canvas.width = document.body.clientWidth;
+            // 获取canvas上下文环境
+            var context = canvas.getContext('2d');
+
+            setInterval(function(){
+                render(context);
+                update();
+            }, 50);
+        }
+        function render(context) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            context.fillStyle = ball.color;
+            context.beginPath();
+            context.arc(ball.x, ball.y, ball.r, 0, 2*Math.PI);
+            context.closePath();
+
+            context.fill();
+        }
+        function update() {
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+            ball.vy += ball.g;
+        }
+    </script>
+</body>
+</html>
