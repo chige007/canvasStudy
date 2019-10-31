@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" style="padding: 0px; margin: 0px; height: 100%; width: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body style="padding: 0px; margin: 0px; height: 100%; width: 100%;">
+    <canvas id="canvas">
+
+    </canvas>
+    <script>
+        // 关键字：
+
+        var canvas, context, ball = [];
+        var count = 0;
+        window.onload = function() {
+            canvas = document.getElementById('canvas');
+            canvas.height = document.body.clientHeight;
+            canvas.width = document.body.clientWidth;
+            // 获取canvas上下文环境
+            context = canvas.getContext('2d');
+
+            for (var i = 0; i < 100; i++) {
+                var r = Math.random() * 255;
+                var g = Math.random() * 255;
+                var b = Math.random() * 255;
+                var round = Math.random() * 60 + 20;
+                ball.push({
+                    x: Math.random() * (canvas.width - 2 * round - 10) + round + 10,
+                    y: Math.random() * (canvas.height - 2 * round - 10) + round + 10,
+                    r: round,
+                    color: 'rgb('+ r +', '+ g +', '+ b +')',
+                    vx: Math.random() * 10 - 5,
+                    vy: Math.random() * 10 - 5,
+                    opacity: Math.random()
+                });
+            }
+
+            setInterval(function(){
+                render(context);
+                update();
+            }, 50);
+        }
+        function render(context) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.globalAlpha = 0.5;
+            for (var i = 0 ; i < ball.length; i++) {
+                context.save();
+                context.beginPath();
+                context.fillStyle = ball[i].color;
+                context.arc(ball[i].x += ball[i].vx, ball[i].y += ball[i].vy, ball[i].r, 0, 2 * Math.PI);
+                context.closePath();
+                context.fill();
+                context.restore();
+            }
+
+        }
+        function update() {
+            for (var i = 0 ; i < ball.length; i++) {
+                if (ball[i].x >= canvas.width - ball[i].r || ball[i].x <= ball[i].r) {
+                    ball[i].vx = -ball[i].vx;
+                }
+                if (ball[i].y >= canvas.height - ball[i].r || ball[i].y <= ball[i].r) {
+                    ball[i].vy = -ball[i].vy;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
